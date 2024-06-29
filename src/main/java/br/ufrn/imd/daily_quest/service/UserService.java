@@ -1,8 +1,10 @@
 package br.ufrn.imd.daily_quest.service;
 
+import br.ufrn.imd.daily_quest.exception.BadRequestException;
 import br.ufrn.imd.daily_quest.exception.NotFoundException;
 import br.ufrn.imd.daily_quest.exception.UnauthorizedException;
 import br.ufrn.imd.daily_quest.model.User;
+import br.ufrn.imd.daily_quest.model.enums.UserTypeEnum;
 import br.ufrn.imd.daily_quest.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User save(User user) {
+    public User save(User user) throws BadRequestException {
+        validateUser(user);
         String password = user.getPassword();
         user.setPassword(passwordService.hashPassword(password));
         return userRepository.save(user);
@@ -55,7 +58,8 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User update(Long id, User user) throws NotFoundException {
+    public User update(Long id, User user) throws NotFoundException, BadRequestException {
+        validateUser(user);
         return userRepository.findById(id)
                 .map(existingUser -> {
                     existingUser.setName(user.getName());
@@ -66,4 +70,33 @@ public class UserService {
                     return userRepository.save(existingUser);
                 }).orElseThrow(() -> new NotFoundException("User not found"));
     }
+
+    public void validateUser(User user) throws BadRequestException {
+        if(user.getName() == null || user.getName().isEmpty()){
+            throw new BadRequestException("Name is required");
+        }
+        if(user.getLastName() == null || user.getLastName().isEmpty()){
+            throw new BadRequestException("Last name is required");
+        }
+        if(user.getEmail() == null || user.getEmail().isEmpty()){
+            throw new BadRequestException("Email is required");
+        }
+        if(user.getUsername() == null || user.getUsername().isEmpty()){
+            throw new BadRequestException("Username is required");
+        }
+        if(user.getPassword() == null || user.getPassword().isEmpty()){
+            throw new BadRequestException("Password is required");
+        }
+        if(user.getUserType() == null){
+            throw new BadRequestException("User type is required");
+        }
+        try {
+            UserTypeEnum.valueOf(user.getUserType().toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid user type");
+        }
+    }
+
+
 }
+
