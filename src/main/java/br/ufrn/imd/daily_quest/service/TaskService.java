@@ -81,7 +81,7 @@ public class TaskService {
         return task;
     }
 
-    public void validateTask(Task task) throws BadRequestException {
+    private void validateTask(Task task) throws BadRequestException {
         if(task.getText() == null || task.getText().isEmpty()){
             throw new BadRequestException("Text is required");
         }
