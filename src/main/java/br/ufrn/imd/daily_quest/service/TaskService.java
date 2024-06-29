@@ -9,6 +9,7 @@ import br.ufrn.imd.daily_quest.model.dto.TaskDTO;
 import br.ufrn.imd.daily_quest.model.enums.PriorityEnum;
 import br.ufrn.imd.daily_quest.model.enums.TaskStatusEnum;
 import br.ufrn.imd.daily_quest.repository.TaskRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,15 +23,12 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserService userService;
-    private final PathService pathService;
 
     public TaskService(
             TaskRepository taskRepository,
-            UserService userService,
-            PathService pathService) {
+            UserService userService) {
         this.taskRepository = taskRepository;
         this.userService = userService;
-        this.pathService = pathService;
     }
 
     public List<Task> findAll() {
