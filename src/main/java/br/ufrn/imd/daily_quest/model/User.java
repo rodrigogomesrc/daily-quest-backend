@@ -19,6 +19,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserTypeEnum userType;
 
+    private int rewardsGained;
+
     public Long getId() {
         return id;
     }
@@ -73,5 +75,13 @@ public class User {
 
     public void setUserType(UserTypeEnum userType) {
         this.userType = userType;
+    }
+
+    public int getRewardsGained() {
+        return rewardsGained;
+    }
+
+    public void setRewardsGained(int rewardsGained) {
+        this.rewardsGained = rewardsGained;
     }
 }

@@ -71,7 +71,7 @@ public class UserService {
                 }).orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public void validateUser(User user) throws BadRequestException {
+    private void validateUser(User user) throws BadRequestException {
         if(user.getName() == null || user.getName().isEmpty()){
             throw new BadRequestException("Name is required");
         }

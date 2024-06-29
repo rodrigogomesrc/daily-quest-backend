@@ -1,6 +1,7 @@
 package br.ufrn.imd.daily_quest.model;
 
 import br.ufrn.imd.daily_quest.model.enums.PriorityEnum;
+import br.ufrn.imd.daily_quest.model.enums.TaskStatusEnum;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +16,9 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private PriorityEnum priority;
+
+    @Enumerated(EnumType.STRING)
+    private TaskStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
@@ -62,6 +66,14 @@ public class Task {
 
     public void setPriority(PriorityEnum priority) {
         this.priority = priority;
+    }
+
+    public TaskStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatusEnum status) {
+        this.status = status;
     }
 
     public User getCreator() {
