@@ -1,10 +1,6 @@
 package br.ufrn.imd.daily_quest.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 
 @Entity
 public class Path {
@@ -13,6 +9,11 @@ public class Path {
     private Long id;
     private String name;
     private int reward;
+    private String imgUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     public Long getId() {
         return id;
@@ -36,6 +37,22 @@ public class Path {
 
     public void setReward(int reward) {
         this.reward = reward;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }
 

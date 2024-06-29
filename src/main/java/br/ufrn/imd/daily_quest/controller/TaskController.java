@@ -4,18 +4,20 @@ import br.ufrn.imd.daily_quest.exception.BadRequestException;
 import br.ufrn.imd.daily_quest.exception.NotFoundException;
 import br.ufrn.imd.daily_quest.model.Task;
 import br.ufrn.imd.daily_quest.model.dto.TaskDTO;
+import br.ufrn.imd.daily_quest.model.enums.PriorityEnum;
+import br.ufrn.imd.daily_quest.model.enums.TaskStatusEnum;
 import br.ufrn.imd.daily_quest.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
-
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -52,5 +54,22 @@ public class TaskController {
             throws NotFoundException {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{taskId}/{taskStatus}")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long taskId, @PathVariable String taskStatus)
+            throws NotFoundException {
+        Task updatedTask = taskService.updateTaskStatus(taskId, TaskStatusEnum.valueOf(taskStatus));
+        return ResponseEntity.ok().body(updatedTask);
+    }
+
+    @GetMapping("/valid-task-statuses")
+    public ResponseEntity<Set<TaskStatusEnum>> getValidTaskStatuses() {
+        return ResponseEntity.ok().body(taskService.getValidTaskStatuses());
+    }
+
+    @GetMapping("/valid-task-priorities")
+    public ResponseEntity<Set<PriorityEnum>> getValidTaskPriorities() {
+        return ResponseEntity.ok().body(taskService.getValidTaskPriorities());
     }
 }

@@ -3,7 +3,9 @@ package br.ufrn.imd.daily_quest.controller;
 import br.ufrn.imd.daily_quest.exception.BadRequestException;
 import br.ufrn.imd.daily_quest.exception.NotFoundException;
 import br.ufrn.imd.daily_quest.model.Path;
+import br.ufrn.imd.daily_quest.model.TaskPath;
 import br.ufrn.imd.daily_quest.service.PathService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,29 +21,48 @@ public class PathController {
     }
 
     @GetMapping
-    public List<Path> getAllPaths() {
-        return pathService.findAll();
+    public ResponseEntity<List<Path>> getAllPaths() {
+        List<Path> paths = pathService.findAll();
+        return ResponseEntity.ok().body(paths);
     }
 
     @GetMapping("/{id}")
-    public Path getPathById(@PathVariable Long id) throws NotFoundException {
-        return pathService.findById(id);
+    public ResponseEntity<Path> getPathById(@PathVariable Long id) throws NotFoundException {
+        Path path = pathService.findById(id);
+        return ResponseEntity.ok().body(path);
     }
 
-    @PostMapping
-    public Path createPath(@RequestBody Path path) throws BadRequestException {
-        return pathService.save(path);
+    @PostMapping("/{userId}")
+    public ResponseEntity<Path> createPath(@RequestBody Path path, @PathVariable Long userId)
+            throws BadRequestException, NotFoundException {
+        Path createdPath = pathService.save(path, userId);
+        return ResponseEntity.ok().body(createdPath);
     }
 
-    @PutMapping("/{id}")
-    public Path updatePath(@PathVariable Long id, @RequestBody Path path)
+    @PutMapping("/{id}/{userId}")
+    public ResponseEntity<Path> updatePath(@PathVariable Long id, @RequestBody Path path, @PathVariable Long userId)
             throws NotFoundException, BadRequestException {
-        return pathService.updatePath(id, path);
+        Path updatedPath = pathService.updatePath(id, path, userId);
+        return ResponseEntity.ok().body(updatedPath);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePath(@PathVariable Long id) throws NotFoundException {
+    public ResponseEntity<Void> deletePath(@PathVariable Long id) throws NotFoundException {
         pathService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{pathId}/{taskId}")
+    public ResponseEntity<TaskPath> addTaskToPath(@PathVariable Long pathId, @PathVariable Long taskId)
+            throws NotFoundException {
+        TaskPath taskPath = pathService.addTaskToPath(pathId, taskId);
+        return ResponseEntity.ok().body(taskPath);
+    }
+
+    @DeleteMapping("/{pathId}/{taskId}")
+    public ResponseEntity<Void> removeTaskFromPath(@PathVariable Long pathId, @PathVariable Long taskId)
+            throws NotFoundException {
+        pathService.removeTaskFromPath(pathId, taskId);
+        return ResponseEntity.noContent().build();
+    }
 }
