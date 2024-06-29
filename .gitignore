@@ -199,3 +199,8 @@ README.html
 *.iml
 .idea
 .exercism
+
+# Docker
+.env
+/postgres
+/docker/postgres

@@ -4,6 +4,7 @@ import br.ufrn.imd.daily_quest.model.enums.UserTypeEnum;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
