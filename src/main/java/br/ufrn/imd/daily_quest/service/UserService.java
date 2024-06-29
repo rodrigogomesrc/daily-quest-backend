@@ -89,7 +89,6 @@ public class UserService {
         }
         if(user.getUserType() == null){
             throw new BadRequestException("User type is required");
-
         }
         try {
             UserTypeEnum.valueOf(user.getUserType().toString().toUpperCase());
