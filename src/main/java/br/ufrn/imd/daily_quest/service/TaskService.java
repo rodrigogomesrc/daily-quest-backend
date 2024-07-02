@@ -79,14 +79,14 @@ public class TaskService {
 
     private Task createTaskFromDTO(TaskDTO taskDTO) throws BadRequestException {
         Task task = new Task();
-        task.setTitle(taskDTO.text());
+        task.setTitle(taskDTO.title());
         task.setText(taskDTO.text());
         task.setPriority(taskDTO.priority());
         task.setStatus(taskDTO.status());
         task.setDueDate(taskDTO.dueDate());
         task.setImgLink(taskDTO.imgLink());
         task.setReward(taskDTO.reward());
-        validateTask(task);
+        //validateTask(task);
         return task;
     }
 
